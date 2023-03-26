@@ -13,6 +13,7 @@ public class Chunk : MonoBehaviour {
 
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
+    private MeshCollider meshCollider;
 
     public static Vector3 ChunkSizeInVoxels = new Vector3(16, 256, 16);
 
@@ -23,6 +24,7 @@ public class Chunk : MonoBehaviour {
     private void Awake() {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
+        meshCollider = GetComponent<MeshCollider>();
     }
     
     private void Start() {
@@ -60,6 +62,7 @@ public class Chunk : MonoBehaviour {
         voxelMesh.Optimize();
 
         meshFilter.mesh = voxelMesh;
+        meshCollider.sharedMesh = voxelMesh;
     }
 
     private void VoxelGen(Vector3 offset) {

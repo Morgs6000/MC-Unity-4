@@ -14,7 +14,19 @@ public class World : MonoBehaviour {
         WorldSizeInVoxels.z / Chunk.ChunkSizeInVoxels.z
     );
 
+    private Transform player;
+
+    private GameObject mainCamera;
+
+    private void Awake() {
+        mainCamera = GameObject.Find("Main Camera");
+        player = GameObject.Find("Player").transform;
+    }
+
     private void Start() {
+        player.gameObject.SetActive(false);
+        mainCamera.SetActive(true);
+
         StartCoroutine(WorldGen());
     }
 
@@ -39,6 +51,21 @@ public class World : MonoBehaviour {
                 yield return null;
             }
         }
+
+        SetPlayerSpawn();
+    }
+
+    private void SetPlayerSpawn() {
+        Vector3 spawnPosition = new Vector3(
+            0,
+            WorldSizeInVoxels.y,
+            0
+        );
+
+        player.position = spawnPosition;
+
+        player.gameObject.SetActive(true);
+        mainCamera.SetActive(false);
     }
 
     private void InstantiateChunk(Vector3 chunkPos) {
