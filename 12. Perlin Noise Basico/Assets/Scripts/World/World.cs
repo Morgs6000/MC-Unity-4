@@ -107,13 +107,33 @@ public class World : MonoBehaviour {
         int y = (int)offset.y;
         int z = (int)offset.z;
 
+        float _x = x + chunk.transform.position.x;
+        float _y = y + chunk.transform.position.y;
+        float _z = z + chunk.transform.position.z;
+
+        _x += WorldSizeInVoxels.x;
+        //_y += WorldSizeInVoxels.y;
+        _z += WorldSizeInVoxels.z;
+        
+        // BEDROCK LAYER
+        if(_y == 0) {
+            chunk.voxelMap[x, y, z] = EnumVoxels.bedrock;
+        }
+
+        int noise = Noise.Perlin(_x, _z);
+
         // STONE LAYER
-        if(y < 64) {
+        if(_y < noise - 4) {
             chunk.voxelMap[x, y, z] = EnumVoxels.stone;
         }
 
+        // DIRT LAYER
+        else if(_y < noise) {
+            chunk.voxelMap[x, y, z] = EnumVoxels.dirt;
+        }
+
         // GRASS LAYER
-        if(y == 64) {
+        else if(_y == noise) {
             chunk.voxelMap[x, y, z] = EnumVoxels.grass;
         }
     }
